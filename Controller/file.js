@@ -1,3 +1,5 @@
+const  model = require("./../Model/model")
+
 const response = [{username: "Salina",
                         age: 22}];
 
