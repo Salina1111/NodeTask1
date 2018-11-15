@@ -1,6 +1,3 @@
-var express = require("express"),
-    app = express();
-
 const response = [{username: "Salina",
                         age: 22}];
 
