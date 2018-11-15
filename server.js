@@ -1,7 +1,10 @@
 
 const express = require('express');
-var route = require("./Route/route");;
+var route = require("./Route/route");
+parser= require("body-parser");
 var app = express();
+
+app.use(parser.json());
 app.use('/Route', route);
 
 const hostname = '127.0.0.1';
