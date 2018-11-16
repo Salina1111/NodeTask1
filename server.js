@@ -16,7 +16,7 @@ mongoose.connection.once('open',function(){
 parser= require("body-parser");
 var app = express();
 
-mongoose.Promise = global.Promise;
+
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 

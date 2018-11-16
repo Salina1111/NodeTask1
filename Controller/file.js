@@ -1,10 +1,10 @@
 const  Response = require("./../Model/model")
-var response; 
+// var response; 
 
 //create data controller
 exports.create_data = function (req, res) {
 
-    response = new Response(
+   let response = new Response(
         {
             username: req.body.username,
             age: req.body.age
