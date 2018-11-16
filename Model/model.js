@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 //Create Schema and Model
 
 const MarioCharSchema = new Schema({
-    name: String,
-    weight : Number
+    username: String,
+    age : Number
 });
 
 const MarioChar = mongoose.model('MarioChar',MarioCharSchema);
