@@ -1,8 +1,11 @@
 
 const express = require('express');
 var route = require("./Route/route");
+var route1 = require("./Route/promiseRoute");
+var parser= require("body-parser");
+var app = express();
 
-const mongoose = require('mongoose');
+const mongoose = require('mongoose');;
 
 //Connect to mongoDb
 mongoose.connect('mongodb://localhost/testaroo');
@@ -13,15 +16,9 @@ mongoose.connection.once('open',function(){
     console.log('Connection error:',error);
 })
 
-parser= require("body-parser");
-var app = express();
-
-
-let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
 app.use(parser.json());
-app.use('/Route', route);
+//app.use('/route', route);
+app.use('/route', route1);
 
 const hostname = '127.0.0.1';
 const port = 8001;

@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const MarioCharSchema = new Schema({
     username: String,
     age : Number,
-    date: { type: Date, default: Date.now },
+    date: { type: Date, default: Date.now() }
 });
 
 const MarioChar = mongoose.model('MarioChar',MarioCharSchema);
