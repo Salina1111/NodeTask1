@@ -118,3 +118,26 @@ exports.delete = (req, res) => {
         });
     });
 };
+
+//patch to update the specific value of an object
+exports.patch = (req, res) => {
+
+    Note.findById(req.params.id)
+    .then(note => {
+        if (req.params.id) {
+            delete req.params.id;
+        }
+
+        //Patch request for making the deleted boolean -> true
+        note.deleted = true;
+
+        //save
+        note.save();
+        res.json({ message: "Updated succesfully" });
+
+    }).catch(err => {
+        return res.status(500).json({
+            message: "Some error occurred while editing  the data."
+        });
+    });
+};

@@ -32,7 +32,7 @@ exports.create = async (req, res) => {
 exports.findAll = async(req, res) => {
     
     try{
-        const note = await Note.find();
+        const note = await Note.find({deleted: {$ne: true}}).sort({date: 'desc'});
         const product = await res.json(note);
         return product;
     }
