@@ -2,6 +2,7 @@
 const express = require('express');
 var route = require("./Route/route");
 var route1 = require("./Route/promiseRoute");
+var asyncRoute = require("./Route/asyncAwaitRoute");
 var parser= require("body-parser");
 var app = express();
 
@@ -19,6 +20,7 @@ mongoose.connection.once('open',function(){
 app.use(parser.json());
 //app.use('/route', route);
 app.use('/route', route1);
+app.use('/async', asyncRoute);
 
 const hostname = '127.0.0.1';
 const port = 8001;
