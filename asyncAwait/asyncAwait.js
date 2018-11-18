@@ -8,13 +8,13 @@ exports.create = async (req, res) => {
             message: "Age can not be empty"
         });
     }
-
+    
     let note = new Note({
         username: req.body.username || "Untitled Note", 
         age: req.body.age,
         date: req.body.date
     });
-
+    
     
     // Save Note in the database
     try {
@@ -30,7 +30,7 @@ exports.create = async (req, res) => {
 
 // Retrieve and return all notes from the database.
 exports.findAll = async(req, res) => {
-
+    
     try{
         const note = await Note.find();
         const product = await res.json(note);
@@ -55,7 +55,7 @@ exports.findOne = async (req, res) => {
         const product = await res.json(note);
         return product;
     }
-
+    
     catch(err) {
         if(err.kind === 'ObjectId') {
             return res.status(404).json({
@@ -71,31 +71,31 @@ exports.findOne = async (req, res) => {
 
 // Update a note identified by the id in the request
 exports.update = async (req, res) => {
-
+    
     // Validate Request
     if(!req.body.age) {
         return res.status(400).send({
             message: "age can not be empty"
         });
     }
-
+    
     // Find note and update it with the request body
     try {
         const note = await Note.findById(req.params.id);
         note.username = await req.body.username;
         note.age = await req.body.age;
         note.date = await req.body.date;
-
+        
         if(!note) {
             return res.status(404).send({
                 message: "data not found with id "  + req.params.id
             });
         }
-
+        
         const data = await note.save();
         const message = await res.json({message: "successfully updated"});
     }
-
+    
     catch(err) {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
@@ -119,7 +119,7 @@ exports.delete = async (req, res) => {
         }
         const message = await res.json({message: "data deleted successfully!"});
     }
-
+    
     catch(err)  {
         if(err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({
@@ -128,6 +128,33 @@ exports.delete = async (req, res) => {
         }
         return res.status(500).send({
             message: "Could not delete note with id " + req.params.id
+        });
+    }
+};
+
+//update the specific value of an object
+exports.patch = async (req, res) => {
+    
+    try {
+        
+        const note = await Note.findById(req.params.id);
+        
+        if (req.params.id) {
+            delete req.params.id;
+        }
+        
+        //Patch request for making the deleted boolean -> true
+        note.deleted = true;
+        
+        
+        //save it
+        const save = await note.save();
+        const respnose = await res.json({ message: "Updated succesfully" });
+    }
+    
+    catch (err) {
+        res.status(500).json({
+            message: "Some error occurred while editing  the data."
         });
     }
 };
