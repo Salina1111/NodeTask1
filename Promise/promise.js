@@ -31,7 +31,7 @@ exports.create = (req, res) => {
 
 // Retrieve and return all notes from the database.
 exports.findAll = (req, res) => {
-    Note.find()
+    Note.find({deleted: {$ne: true}}).sort({date: 'desc'})
     .then(note => {
         res.json(note);
     }).catch(err => {
@@ -115,6 +115,34 @@ exports.delete = (req, res) => {
         }
         return res.status(500).send({
             message: "Could not delete note with id " + req.params.id
+        });
+    });
+};
+
+//patch to update the specific value of an object
+exports.patch = (req, res) => {
+    
+    Note.findById(req.params.id)
+    .then(note => {
+        if (req.params.id) {
+            delete req.params.id;
+        }
+        
+        //Patch request for making the deleted boolean -> true
+        if (note.deleted == false) {
+            note.deleted = true;
+        } 
+        else {
+            note.deleted = false;
+        }
+        
+        //save
+        note.save();
+        res.json({ message: "Updated succesfully" });
+        
+    }).catch(err => {
+        return res.status(500).json({
+            message: "Some error occurred while editing  the data."
         });
     });
 };

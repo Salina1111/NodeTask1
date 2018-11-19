@@ -4,11 +4,11 @@ var router = express.Router();
 var responses= require("./../Promise/promise");
 
 
-router.post('/post/p', responses.create);
-router.get('/get/p', responses.findAll);
-router.get('/get/p/:id', responses.findOne);
-router.put('/:id/update/p', responses.update);
-router.patch('/:id/patch/p', responses.delete);
-
+router.post('/post/', responses.create);
+router.get('/get/', responses.findAll);
+router.get('/get/:id', responses.findOne);
+router.put('/update/:id', responses.update);
+router.delete('/delete/:id/', responses.delete);
+router.patch('/patch/:id/',responses.patch);
 
 module.exports = router;
