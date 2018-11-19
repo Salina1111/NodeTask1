@@ -31,7 +31,7 @@ exports.create = (req, res) => {
 
 // Retrieve and return all notes from the database.
 exports.findAll = (req, res) => {
-    Note.find()
+    Note.find({deleted: {$ne: true}}).sort({date: 'desc'})
     .then(note => {
         res.json(note);
     }).catch(err => {
