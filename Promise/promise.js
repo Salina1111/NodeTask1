@@ -32,18 +32,36 @@ exports.create = (req, res) => {
 
 // Retrieve and return all notes from the database.
 exports.findAll = (req, res) => {
-    Note.find({deleted: {$ne: true}}).sort({date: 'desc'})
-    .then(note => {
+    //pagination ?pageNo=2&size=4
+    var pageNo = parseInt(req.query.pageNo);
+    var size = parseInt(req.query.size);
+  
+    var query = {}; //empty query
+  
+    //validate pageNo
+    if (pageNo < 0 || pageNo === 0) {
+      response = {
+        error: true,
+        message: "invalid page number, should start with 1"
+      };
+      return res.json(response);
+    }
+    query.skip = size * (pageNo - 1);
+    query.limit = size;
+    const user = Note.find({}, {}, query);
+  
+    //sort response of findAll in descending order according to date and "deleted:false"
+    user.find({ deleted: { $ne: true } }).sort({ date: "desc" })
+      .then(note => {
         res.json(note);
-    }).catch(err => {
+      })
+      .catch(err => {
         res.status(500).json({
-            message: "Some error occurred while retrieving notes.",
-            errMsg : err.toString()
-
+          message: "Some error occurred while retrieving notes.",
+          errMsg: err.toString()
         });
-    });
-};
-
+      });
+  };
 
 // Find a single note with a id
 exports.findOne = (req, res) => {
