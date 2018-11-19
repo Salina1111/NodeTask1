@@ -32,9 +32,27 @@ exports.create = async (req, res) => {
 exports.findAll = async(req, res) => {
     
     try{
-        const note = await Note.find({deleted: {$ne: true}}).sort({date: 'desc'});
-        const product = await res.json(note);
-        return product;
+        //Handling query request
+        var pageNo = parseInt(req.query.pageNo);
+        var size = parseInt(req.query.size);
+        var query = {}; //empty query  
+
+
+        //invalid pageNO
+        if (pageNo < 0 || !pageNo) {
+            response = {"error" : true,"message" : "invalid page number, should start with 1"};
+            return res.json(response)      
+          }
+
+        //fetch pageNo and size
+        query.skip = size * (pageNo - 1);
+        query.limit = size;
+
+        const users =Note.find({}, {}, query);
+
+        const note = await users.find({deleted: {$ne: true}}).sort({date: 'desc'});
+        const msg = await res.json(note);
+        return msg;
     }
     catch(err) {
         res.status(500).json({
@@ -82,9 +100,9 @@ exports.update = async (req, res) => {
     // Find note and update it with the request body
     try {
         const note = await Note.findById(req.params.id);
-        note.username = await req.body.username;
-        note.age = await req.body.age;
-        note.date = await req.body.date;
+        note.username = req.body.username;
+        note.age = req.body.age;
+        note.date =req.body.date;
         
         if(!note) {
             return res.status(404).send({

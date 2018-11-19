@@ -1,6 +1,5 @@
 const Note = require('./../Model/model');
 
-
 // Create and Save a new Note
 exports.create = (req, res) => {
     
@@ -24,7 +23,9 @@ exports.create = (req, res) => {
     }).catch(err => {
         
         res.status(500).json({
-            message: "Some error occurred while creating the Note." 
+            message: "Some error occurred while creating the Note." ,
+            errMsg : err.toString()
+
         });
     });
 };
@@ -36,10 +37,13 @@ exports.findAll = (req, res) => {
         res.json(note);
     }).catch(err => {
         res.status(500).json({
-            message: "Some error occurred while retrieving notes."
+            message: "Some error occurred while retrieving notes.",
+            errMsg : err.toString()
+
         });
     });
 };
+
 
 // Find a single note with a id
 exports.findOne = (req, res) => {
@@ -54,11 +58,14 @@ exports.findOne = (req, res) => {
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "data not found with id "  + req.params.id
+                message: "data not found with id "  + req.params.id,
+                errMsg : err.toString()
+
             });                
         }
         return res.status(500).send({
-            message: "Error retrieving data with id "  + req.params.id
+            message: "Error retrieving data with id "  + req.params.id,
+            errMsg : err.toString()
         });
     });
 };
@@ -88,11 +95,15 @@ exports.update = (req, res) => {
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "data not found with id "  + req.params.id
+                message: "data not found with id "  + req.params.id,
+                errMsg :err.toString()
+
             });                
         }
         return res.status(500).send({
-            message: "Error updating note with id " 
+            message: "Error updating note with id ",
+            errMsg : err.toString()
+
         });
     });
 };
@@ -110,11 +121,15 @@ exports.delete = (req, res) => {
     }).catch(err => {
         if(err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({
-                message: "data not found with id " + req.params.id
+                message: "data not found with id " + req.params.id,
+                errMsg : err.toString()
+
             });                
         }
         return res.status(500).send({
-            message: "Could not delete note with id " + req.params.id
+            message: "Could not delete note with id " + req.params.id,
+            errMsg : err.toString()
+
         });
     });
 };
@@ -134,10 +149,13 @@ exports.patch = (req, res) => {
         //save
         note.save();
         res.json({ message: "Updated succesfully" });
+        
 
     }).catch(err => {
         return res.status(500).json({
-            message: "Some error occurred while editing  the data."
+            message: "Some error occurred while editing  the data.",
+            errMsg : err.toString()
+
         });
     });
 };
